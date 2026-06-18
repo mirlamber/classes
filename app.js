@@ -12,7 +12,7 @@ let classes = [
     "C",
     "D"
 ];
-
+const classeOrigine = "NVX";
 
 document.getElementById("fileBtn").addEventListener("click", () => {
     document.getElementById("loadFile").click();
@@ -434,70 +434,53 @@ document
 
 function updateStats(){
 
-    ["pool", ...classes]
-    .forEach(classe=>{
+    ["pool", ...classes].forEach(classe => {
 
-        const data =
-        students.filter(
-            s=>s.classe===classe
-        );
+        const data = students.filter(s => s.classe === classe);
 
-        const filles =
-        data.filter(
-            s=>s.sexe==="F"
-        ).length;
+        const filles = data.filter(s => s.sexe === "F").length;
+        const garcons = data.filter(s => s.sexe === "G").length;
 
-        const garcons =
-        data.filter(
-            s=>s.sexe==="G"
-        ).length;
-
-        const difficulte =
-        data.filter(
-            s=>s.tags.includes("difficulte")
-        ).length;
-
-        const comportement =
-        data.filter(
-            s=>s.tags.includes("comportement")
-        ).length;
-
-        const accompagnement =
-        data.filter(
-            s=>s.tags.includes("accompagnement")
-        ).length;
-
-        const excellent =
-        data.filter(
-            s=>s.tags.includes("excellent")
-        ).length;
-
-        const allemand =
-        data.filter(
-            s=>s.tags.includes("allemand")
-        ).length;
-
-        const latin =
-        data.filter(
-            s=>s.tags.includes("latin")
-        ).length;
-
-        const sport =
-        data.filter(
-            s=>s.tags.includes("sport")
-        ).length;
-
-        const cible =
-        document.getElementById(
-            "stats-"+classe
-        );
+        const difficulte = data.filter(s => s.tags.includes("difficulte")).length;
+        const comportement = data.filter(s => s.tags.includes("comportement")).length;
+        const accompagnement = data.filter(s => s.tags.includes("accompagnement")).length;
+        const excellent = data.filter(s => s.tags.includes("excellent")).length;
+        const allemand = data.filter(s => s.tags.includes("allemand")).length;
+        const latin = data.filter(s => s.tags.includes("latin")).length;
+        const sport = data.filter(s => s.tags.includes("sport")).length;
 
 
-        if(!cible) return;
+        /* =========================
+           CAS 1 : POOL (LEGEND UI)
+        ========================= */
+        if (classe === "pool") {
+
+            const setCount = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+
+            setCount("count-difficulte", difficulte);
+            setCount("count-comportement", comportement);
+            setCount("count-accompagnement", accompagnement);
+            setCount("count-excellent", excellent);
+            setCount("count-allemand", allemand);
+            setCount("count-latin", latin);
+            setCount("count-sport", sport);
+
+            return;
+        }
+
+
+        /* =========================
+           CAS 2 : CLASSES
+        ========================= */
+        const cible = document.getElementById("stats-" + classe);
+        if (!cible) return;
 
         cible.innerHTML = `
             ${data.length} élèves<br>
-            ${filles}F / ${garcons}G<br>
+            ${filles}F / ${garcons}G |
             🟡${difficulte}
             🔴${comportement}
             🔵${accompagnement}
@@ -850,7 +833,7 @@ function addStudent(){
         nom,
         prenom,
         sexe,
-        classeOrigine: "A", // ou une valeur par défaut
+        classeOrigine: "NVX", // ou une valeur par défaut
         classe:"pool",
 
         colonne:null,
@@ -868,6 +851,8 @@ function addStudent(){
     .value="";
 
 
+    buildPoolColumns();
+    attachPoolEvents();
     render();
 }
 
