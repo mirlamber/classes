@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Répartition des classes V3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Répartition des classes</h1>
+
+
+<div class="toolbar">
+
+    <div class="file-wrapper">
+
+        <input type="file" id="loadFile" hidden>
+
+        <button id="fileBtn">📁 Choisir un fichier</button>
+
+    </div>
+
+    <button id="saveBtn">💾 Sauvegarder</button>
+
+    <button id="pdfBtn">📄 Export PDF</button>
+    <button id="adminBtn">⚙️ Admin</button>
+
+    <div id="adminModal" class="modal" style="display:none;">
+        <div class="modal-content">
+
+            <h2>Admin</h2>
+
+            <textarea id="adminInput"
+            placeholder="Nom    Prénom    Sexe"></textarea>
+
+            <button id="adminImportBtn">Importer CSV</button>
+            <button id="adminCloseBtn">Fermer</button>
+
+        </div>
+    </div>
+</div>
+
+<div class="config-bar">
+
+    <label>Nombre de classes :</label>
+
+    <select id="nbClasses">
+        <option value="4" selected>4</option>
+        <option value="5" >5</option>
+        <option value="6">6</option>
+    </select>
+
+    <button id="buildBtn">
+        Créer les classes
+    </button>
+
+</div>
+
+
+
+<!-- NON AFFECTÉS -->
+
+<div class="column">
+    <div class="add-student-mini">
+        <div class="add-student-header">
+            Ajout rapide
+        </div>
+
+        <input type="text" id="newPrenom" placeholder="Prénom">
+
+        <input type="text" id="newNom" placeholder="Nom">
+
+        <select id="newSexe">
+            <option value="F">F</option>
+            <option value="G">G</option>
+        </select>
+
+        <button id="addStudentBtn">➕</button>
+
+        <div class="trash-zone" id="trash">
+
+            🗑️ 
+
+        </div>
+
+    </div>
+   <h2>
+        Non affectés
+        <span class="hint"> (clic droit sur l'élève pour options)</span>
+    </h2>
+    <div class="legend">
+
+        <span>🟡 Difficultés</span>
+        <span>🔴 Comportement</span>
+        <span>🔵 Accompagnement</span>
+        <span>🟢 Excellent</span>
+
+        <span>🟣 Allemand</span>
+        <span>🟤 Latin</span>
+        <span>⚫ Sport</span>
+
+    </div>
+    <div class="search-bar">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Rechercher un élève..."
+        >
+    </div>
+    <div class="stats" id="stats-pool"></div>
+    <div
+        id="poolBoard"
+        class="pool-board dynamic">
+    </div>
+</div>
+
+<!-- CLASSES -->
+
+<div
+    id="classesBoard"
+    class="classes-board">
+</div>
+
+
+<!-- MENU CONTEXTUEL -->
+
+<div id="contextMenu" class="context-menu">
+
+    <label>
+        <input type="checkbox" id="ctx-difficulte">
+        🟡 Difficultés
+    </label>
+
+    <label>
+        <input type="checkbox" id="ctx-comportement">
+        🔴 Comportement
+    </label>
+
+    <label>
+        <input type="checkbox" id="ctx-accompagnement">
+        🔵 Accompagnement
+    </label>
+
+    <label>
+        <input type="checkbox" id="ctx-excellent">
+        🟢 Excellent niveau
+    </label>
+
+    <label>
+        <input type="checkbox" id="ctx-allemand">
+        🟣 Allemand
+    </label>
+
+    <label>
+        <input type="checkbox" id="ctx-latin">
+        🟤 Latin
+    </label>
+
+    <label>
+        <input type="checkbox" id="ctx-sport">
+        ⚫ Sport
+    </label>
+</div>
+
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
