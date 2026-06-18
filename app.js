@@ -599,7 +599,7 @@ function exportPDF(){
 
     let contenu = "";
 
-    ["A","B","C","D"].forEach(classe=>{
+    classes.forEach(classe=>{
 
         contenu += `
         <h2>Classe ${classe}</h2>
