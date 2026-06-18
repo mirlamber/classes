@@ -479,15 +479,27 @@ function updateStats(){
         if (!cible) return;
 
         cible.innerHTML = `
-            ${data.length} élèves<br>
-            ${filles}F / ${garcons}G |
-            🟡${difficulte}
-            🔴${comportement}
-            🔵${accompagnement}
-            🟢${excellent}
-            🟣${allemand}
-            🟤${latin}
-            ⚫${sport}
+            <div class="stats-line">
+
+                <div>${data.length} élèves</div>
+
+                <div class="stats-second">
+                    <span>${filles}F / ${garcons}G</span>
+
+                    <span class="tags">
+
+                        <span class="tag">🟡 <span class="badge">${difficulte}</span></span>
+                        <span class="tag">🔴 <span class="badge">${comportement}</span></span>
+                        <span class="tag">🔵 <span class="badge">${accompagnement}</span></span>
+                        <span class="tag">🟢 <span class="badge">${excellent}</span></span>
+                        <span class="tag">🟣 <span class="badge">${allemand}</span></span>
+                        <span class="tag">🟤 <span class="badge">${latin}</span></span>
+                        <span class="tag">⚫ <span class="badge">${sport}</span></span>
+
+                    </span>
+                </div>
+
+            </div>
         `;
     });
 }
