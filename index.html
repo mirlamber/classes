@@ -89,18 +89,6 @@
         Non affectés
         <span class="hint"> (clic droit sur l'élève pour options)</span>
     </h2>
-    <div class="legend">
-
-        <span>🟡 Difficultés</span>
-        <span>🔴 Comportement</span>
-        <span>🔵 Accompagnement</span>
-        <span>🟢 Excellent</span>
-
-        <span>🟣 Allemand</span>
-        <span>🟤 Latin</span>
-        <span>⚫ Sport</span>
-
-    </div>
     <div class="search-bar">
         <input
             type="text"
@@ -108,11 +96,57 @@
             placeholder="🔍 Rechercher un élève..."
         >
     </div>
-    <div class="stats" id="stats-pool"></div>
+    
     <div
         id="poolBoard"
         class="pool-board dynamic">
     </div>
+
+    <div class="legend" id="legend">
+        <div class="legend-item">
+            <span class="dot">🟡</span>
+            <span class="label">Difficultés</span>
+            <span class="count" id="count-difficulte">0</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="dot">🔴</span>
+            <span class="label">Comportement</span>
+            <span class="count" id="count-comportement">0</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="dot">🔵</span>
+            <span class="label">Accompagnement</span>
+            <span class="count" id="count-accompagnement">0</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="dot">🟢</span>
+            <span class="label">Excellent</span>
+            <span class="count" id="count-excellent">0</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="dot">🟣</span>
+            <span class="label">Allemand</span>
+            <span class="count" id="count-allemand">0</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="dot">🟤</span>
+            <span class="label">Latin</span>
+            <span class="count" id="count-latin">0</span>
+        </div>
+
+        <div class="legend-item">
+            <span class="dot">⚫</span>
+            <span class="label">Sport</span>
+            <span class="count" id="count-sport">0</span>
+        </div>
+    </div>
+
+
 </div>
 
 <!-- CLASSES -->
