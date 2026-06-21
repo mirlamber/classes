@@ -12,7 +12,75 @@ let classes = [
     "C",
     "D"
 ];
-const classeOrigine = "NVX";
+const classeOrigine =
+    document.getElementById("newClasseOrigine").value;
+
+document
+.getElementById("mergeBtn")
+.addEventListener(
+    "click",
+    () => {
+        document
+        .getElementById("mergeFiles")
+        .click();
+    }
+);
+
+document
+.getElementById("mergeFiles")
+.addEventListener(
+    "change",
+     handleMergeFiles
+);
+
+async function handleMergeFiles(event) {
+
+    const files = [...event.target.files];
+    if (files.length === 0) return;
+
+    const merged = new Map();
+
+    for (const file of files) {
+
+        const text = await file.text();
+        const data = JSON.parse(text);
+
+        data.forEach(student => {
+
+            const key = buildKey(student);
+
+            if (!merged.has(key)) {
+
+                merged.set(key, {
+                    ...student,
+                    tags: [...(student.tags || [])]
+                });
+
+            } else {
+
+                const existing = merged.get(key);
+
+                existing.tags = mergeTags(existing.tags, student.tags);
+            }
+        });
+    }
+
+    students = [...merged.values()];
+
+    buildPoolColumns();
+    attachPoolEvents();
+    render();
+
+    alert(`${files.length} fichiers fusionnés`);
+}
+
+function buildKey(student) {
+    return `${student.nom}|${student.prenom}|${student.sexe}`;
+}
+
+function mergeTags(tagsA = [], tagsB = []) {
+    return [...new Set([...tagsA, ...tagsB])];
+}
 
 document.getElementById("fileBtn").addEventListener("click", () => {
     document.getElementById("loadFile").click();
@@ -75,11 +143,17 @@ function buildPoolColumns(){
 
     const classesOrigine = [
         ...new Set(
-            students.map(
-                s => s.classeOrigine
-            )
+            students.map(s => s.classeOrigine)
         )
-    ].sort();
+    ];
+
+    
+
+    classesOrigine.sort((a, b) => {
+        if (a === "NVX") return 1;
+        if (b === "NVX") return -1;
+        return a.localeCompare(b);
+    });
 
     classesOrigine.forEach(classe=>{
 
@@ -845,7 +919,7 @@ function addStudent(){
         nom,
         prenom,
         sexe,
-        classeOrigine: "NVX", // ou une valeur par défaut
+        classeOrigine: document.getElementById("newClasseOrigine").value, // ou une valeur par défaut
         classe:"pool",
 
         colonne:null,
