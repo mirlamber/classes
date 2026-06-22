@@ -225,6 +225,8 @@ function render() {
         if (student.tags.includes("allemand")) div.classList.add("purple");
         if (student.tags.includes("latin")) div.classList.add("brown");
         if (student.tags.includes("sport")) div.classList.add("black");
+        if(student.tags.includes("lce"))div.classList.add("orange");
+        if(student.tags.includes("absent"))div.classList.add("grey");
 
         // 🧲 DRAG
         div.draggable = true;
@@ -265,6 +267,8 @@ function render() {
                     ${student.tags.includes("allemand") ? "🟣" : ""}
                     ${student.tags.includes("latin") ? "🟤" : ""}
                     ${student.tags.includes("sport") ? "⚫" : ""}
+                    ${student.tags.includes("lce") ? "🟠" : ""}
+                    ${student.tags.includes("absent") ? "🚫" : ""}
                 </span>
             </div>
         `;
@@ -445,6 +449,12 @@ function refreshContextMenu(student){
     .getElementById("ctx-sport")
     .checked =
     student.tags.includes("sport");
+
+    document.getElementById("ctx-lce").checked =
+    student.tags.includes("lce");
+
+    document.getElementById("ctx-absent").checked =
+    student.tags.includes("absent");
 }
 
 [
@@ -454,7 +464,9 @@ function refreshContextMenu(student){
 ["ctx-excellent","excellent"],
 ["ctx-allemand","allemand"],
 ["ctx-latin","latin"],
-["ctx-sport","sport"]
+["ctx-sport","sport"],
+["ctx-lfe","lce"],
+["ctx-absent","absent"]
 
 ].forEach(([id,tag])=>{
 
@@ -522,6 +534,8 @@ function updateStats(){
         const allemand = data.filter(s => s.tags.includes("allemand")).length;
         const latin = data.filter(s => s.tags.includes("latin")).length;
         const sport = data.filter(s => s.tags.includes("sport")).length;
+        const lce = data.filter(s => s.tags.includes("lce")).length;
+        const absent = data.filter(s => s.tags.includes("absent")).length;
 
 
         /* =========================
@@ -541,6 +555,8 @@ function updateStats(){
             setCount("count-allemand", allemand);
             setCount("count-latin", latin);
             setCount("count-sport", sport);
+            setCount("count-lce", lce);
+            setCount("count-absent", absent);
 
             return;
         }
@@ -569,6 +585,8 @@ function updateStats(){
                         <span class="tag">🟣 <span class="badge">${allemand}</span></span>
                         <span class="tag">🟤 <span class="badge">${latin}</span></span>
                         <span class="tag">⚫ <span class="badge">${sport}</span></span>
+                        <span class="tag">🟠 <span class="badge">${lce}</span></span>
+                        <span class="tag">🚫 <span class="badge">${absent}</span></span>
 
                     </span>
                 </div>
