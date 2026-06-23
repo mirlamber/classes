@@ -68,6 +68,7 @@ async function handleMergeFiles(event) {
     students = [...merged.values()];
 
     buildPoolColumns();
+    updateClasseOrigineSelect();
     attachPoolEvents();
     render();
 
@@ -205,6 +206,23 @@ function render() {
     console.log("DOM .student after cleanup:", document.querySelectorAll(".student").length);
 
     // ✅ 3. Création des éléments élèves
+
+    students.sort((a, b) => {
+
+        const nomA =
+        `${a.nom} ${a.prenom}`.toLowerCase();
+
+        const nomB =
+        `${b.nom} ${b.prenom}`.toLowerCase();
+
+        return nomA.localeCompare(
+            nomB,
+            "fr",
+            { sensitivity: "base" }
+        );
+
+    });
+
     students.forEach(student => {
 
         const div = document.createElement("div");
@@ -653,6 +671,7 @@ function loadData(event){
         // 🔥 RECONSTRUIRE L’UI AVANT RENDER
         buildClasses();
         attachDropEvents();
+        updateClasseOrigineSelect();
         buildPoolColumns();
         attachPoolEvents();
 
@@ -956,8 +975,47 @@ function addStudent(){
 
 
     buildPoolColumns();
+    updateClasseOrigineSelect();
     attachPoolEvents();
     render();
+}
+
+function updateClasseOrigineSelect() {
+
+    const select =
+    document.getElementById("newClasseOrigine");
+
+    if(!select) return;
+
+    select.innerHTML = "";
+
+    const classesOrigine = [
+        ...new Set(
+            students.map(s => s.classeOrigine)
+        )
+    ];
+
+    classesOrigine.sort();
+
+    classesOrigine.forEach(classe => {
+
+        const option =
+        document.createElement("option");
+
+        option.value = classe;
+        option.textContent = classe;
+
+        select.appendChild(option);
+
+    });
+
+    const nvx =
+    document.createElement("option");
+
+    nvx.value = "NVX";
+    nvx.textContent = "NVX";
+
+    select.appendChild(nvx);
 }
 
 const trash = document.getElementById("trash");
@@ -1094,6 +1152,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
         buildPoolColumns();
+        updateClasseOrigineSelect();
         attachPoolEvents();
         render();
         adminModal.style.display = "none";
