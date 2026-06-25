@@ -796,7 +796,7 @@ function exportPDF(){
 
     fenetre.document.close();
 
-    fenetre.print();
+  //  fenetre.print();
 }
 
 document
