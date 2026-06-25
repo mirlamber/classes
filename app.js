@@ -699,6 +699,8 @@ document
     }
 );
 
+//export pdf + csv
+
 document
 .getElementById("pdfBtn")
 .addEventListener(
@@ -713,21 +715,42 @@ function exportPDF(){
     classes.forEach(classe=>{
 
         contenu += `
-        <h2>Classe ${classe}</h2>
+        <h2>
+            Classe ${getTargetLevel()}${classe}
+            (${students.filter(s => s.classe === classe).length} élèves)
+        </h2>
         <ul>
         `;
 
         students
         .filter(
-            s=>s.classe===classe
+            s => s.classe === classe
         )
+        .sort((a,b) => {
+
+            const nom =
+            a.nom.localeCompare(
+                b.nom,
+                "fr",
+                {sensitivity:"base"}
+            );
+
+            if(nom !== 0) return nom;
+
+            return a.prenom.localeCompare(
+                b.prenom,
+                "fr",
+                {sensitivity:"base"}
+            );
+
+        })
         .forEach(student=>{
 
             contenu += `
             <li>
                 ${student.prenom}
                 ${student.nom}
-                (${student.sexe})
+                (${student.classeOrigine})
             </li>
             `;
         });
@@ -776,6 +799,94 @@ function exportPDF(){
     fenetre.print();
 }
 
+document
+.getElementById("csvBtn")
+.addEventListener(
+    "click",
+    exportCSV
+);
+
+function exportCSV(){
+
+    const lignes = [];
+
+    lignes.push(
+        "Nom;Prénom;Classe"
+    );
+
+    students
+    .slice()
+    .sort((a,b)=>{
+
+        const nom =
+        a.nom.localeCompare(
+            b.nom,
+            "fr",
+            {sensitivity:"base"}
+        );
+
+        if(nom !== 0)
+            return nom;
+
+        return a.prenom.localeCompare(
+            b.prenom,
+            "fr",
+            {sensitivity:"base"}
+        );
+
+    })
+    .forEach(student=>{
+
+        lignes.push(
+            `${student.nom};${student.prenom};${student.classe}`
+        );
+
+    });
+
+    const blob =
+    new Blob(
+        [lignes.join("\n")],
+        {
+            type:"text/csv;charset=utf-8;"
+        }
+    );
+
+    const a =
+    document.createElement("a");
+
+    a.href =
+    URL.createObjectURL(blob);
+
+    a.download =
+    "repartition.csv";
+
+    a.click();
+}
+
+
+////// construction des classes cibles
+
+function getTargetLevel(){
+
+    const premiereClasse =
+    students.find(
+        s => s.classeOrigine !== "NVX"
+    )?.classeOrigine;
+
+    if(!premiereClasse)
+        return "";
+
+    const niveau =
+    parseInt(
+        premiereClasse.match(/\d+/)?.[0]
+    );
+
+    if(isNaN(niveau))
+        return "";
+
+    return niveau - 1;
+}
+
 function buildClasses(){
 
     const board =
@@ -794,7 +905,7 @@ function buildClasses(){
         "column";
 
         div.innerHTML = `
-            <h2>Classe ${classe}</h2>
+            <h2>Classe ${getTargetLevel()}${classe}</h2>
 
             <div
                 class="stats"
