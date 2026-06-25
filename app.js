@@ -604,11 +604,19 @@ function updateStats(){
         ========================= */
         const cible = document.getElementById("stats-" + classe);
         if (!cible) return;
+        const titre =
+        document.getElementById(
+            "title-" + classe
+        );
 
+        if(titre){
+
+            titre.textContent =
+            `Classe ${getTargetLevel()}${classe} • ${data.length} élèves`;
+
+        }
         cible.innerHTML = `
             <div class="stats-line">
-
-                <div>${data.length} élèves</div>
 
                 <div class="stats-second">
                     <span>${filles}F / ${garcons}G</span>
@@ -924,7 +932,9 @@ function buildClasses(){
         "column";
 
         div.innerHTML = `
-            <h2>Classe ${getTargetLevel()}${classe}</h2>
+            <h2 id="title-${classe}">
+                Classe ${getTargetLevel()}${classe}
+            </h2>
 
             <div
                 class="stats"
