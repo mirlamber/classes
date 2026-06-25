@@ -561,6 +561,25 @@ function updateStats(){
         ========================= */
         if (classe === "pool") {
 
+            const total = students.length;
+
+            const nbPool =
+                students.filter(
+                    s => s.classe === "pool"
+                ).length;
+
+            const el =
+                document.getElementById(
+                    "pool-count"
+                );
+
+            if (el) {
+                el.textContent =
+                    ` (${nbPool}/${total})`;
+            }
+
+            // le reste des stats pool
+
             const setCount = (id, value) => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = value;
