@@ -672,7 +672,7 @@ function saveData(){
     URL.createObjectURL(blob);
 
     a.download =
-    "repartition.json";
+    `${getExportFileName()}.json`;
 
     a.click();
 }
@@ -734,6 +734,13 @@ document
     "click",
     exportPDF
 );
+
+function getExportFileName() {
+
+    const niveau = getTargetLevel();
+
+    return `Constitution des classes de ${niveau}e`;
+}
 
 function exportPDF(){
 
@@ -885,7 +892,7 @@ function exportCSV(){
     URL.createObjectURL(blob);
 
     a.download =
-    "repartition.csv";
+    `${getExportFileName()}.csv`;
 
     a.click();
 }
@@ -895,23 +902,21 @@ function exportCSV(){
 
 function getTargetLevel(){
 
-    const premiereClasse =
+    const classe =
     students.find(
-        s => s.classeOrigine !== "NVX"
+        s => s.classeOrigine &&
+             s.classeOrigine !== "NVX"
     )?.classeOrigine;
 
-    if(!premiereClasse)
-        return "";
+    if(!classe)
+        return "5"; // valeur par défaut
 
-    const niveau =
-    parseInt(
-        premiereClasse.match(/\d+/)?.[0]
-    );
+    const match = classe.match(/^(\d+)/);
 
-    if(isNaN(niveau))
-        return "";
+    if(!match)
+        return "5"; // A, B, C, D => futur niveau 5e
 
-    return niveau - 1;
+    return Number(match[1]) - 1;
 }
 
 function buildClasses(){
