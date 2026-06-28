@@ -560,6 +560,23 @@ function updateStats(){
            CAS 1 : POOL (LEGEND UI)
         ========================= */
         if (classe === "pool") {
+            const total = students.length;
+
+            const nbPool =
+                students.filter(
+                    s => s.classe === "pool"
+                ).length;
+
+            const el =
+                document.getElementById(
+                    "pool-count"
+                );
+
+            if (el) {
+                el.textContent =
+                    ` (${nbPool}/${total})`;
+            }
+
 
             const setCount = (id, value) => {
                 const el = document.getElementById(id);
@@ -585,11 +602,21 @@ function updateStats(){
         ========================= */
         const cible = document.getElementById("stats-" + classe);
         if (!cible) return;
+        const titre =
+        document.getElementById(
+            "title-" + classe
+        );
 
+        if(titre){
+
+            titre.textContent =
+            `Classe ${getTargetLevel()}${classe} - ${data.length} élèves`;
+
+        }
         cible.innerHTML = `
             <div class="stats-line">
 
-                <div>${data.length} élèves</div>
+                
 
                 <div class="stats-second">
                     <span>${filles}F / ${garcons}G</span>
@@ -621,32 +648,26 @@ document
     saveData
 );
 
+function getExportFileName() {
+    const niveau = getTargetLevel();
+    
+    // 🗓️ Création de la date au format JJ-MM-AAAA
+    const d = new Date();
+    const dateStr = [
+        String(d.getDate()).padStart(2, '0'),
+        String(d.getMonth() + 1).padStart(2, '0'),
+        d.getFullYear()
+    ].join('-');
+    
+    return `Constitution_des_classes_de_${niveau}e_${dateStr}`;
+}
+
 function saveData(){
-
-    const blob =
-    new Blob(
-        [
-            JSON.stringify(
-                students,
-                null,
-                2
-            )
-        ],
-        {
-            type:
-            "application/json"
-        }
-    );
-
-    const a =
-    document.createElement("a");
-
-    a.href =
-    URL.createObjectURL(blob);
-
-    a.download =
-    "repartition.json";
-
+    const blob = new Blob([JSON.stringify(students, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    // Le nom contiendra maintenant la date grâce à getExportFileName()
+    a.download = `${getExportFileName()}.json`;
     a.click();
 }
 
@@ -760,43 +781,38 @@ function exportPDF(){
         `;
     });
 
-    const fenetre =
-    window.open(
-        "",
-        "_blank"
-    );
+    const fenetre = window.open("", "_blank");
+    const nomFichier = getExportFileName();
 
     fenetre.document.write(`
         <html>
         <head>
-            <title>Répartition</title>
+            <title>${nomFichier}</title>
             <style>
-                body{
-                    font-family:Arial;
-                    padding:20px;
-                }
-
-                h2{
-                    margin-top:30px;
+                body { font-family: Arial; padding: 20px; }
+                /* 🧠 Astuce : on ajoute un media query pour l'impression */
+                @media print {
+                    @page { size: auto; margin: 15mm; }
                 }
             </style>
         </head>
-
         <body>
-
-        <h1>
-        Répartition des classes
-        </h1>
-
-        ${contenu}
-
+            <h1>${nomFichier.replace(/_/g, " ")}</h1>
+            ${contenu}
         </body>
         </html>
     `);
 
     fenetre.document.close();
-
-    fenetre.print();
+    
+    // 🧠 On laisse un peu plus de temps pour que le navigateur 
+    // détecte le titre et initialise le rendu avant d'ouvrir la boîte de dialogue
+    setTimeout(() => {
+        fenetre.focus();
+        fenetre.print();
+        // Une fois la fenêtre fermée, on peut éventuellement la fermer automatiquement
+        // fenetre.close(); 
+    }, 250);
 }
 
 document
@@ -851,15 +867,9 @@ function exportCSV(){
         }
     );
 
-    const a =
-    document.createElement("a");
-
-    a.href =
-    URL.createObjectURL(blob);
-
-    a.download =
-    "repartition.csv";
-
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${getExportFileName()}.csv`;
     a.click();
 }
 
@@ -867,6 +877,10 @@ function exportCSV(){
 ////// construction des classes cibles
 
 function getTargetLevel(){
+
+    // Aucun élève importé : pas de préfixe
+    if(students.length === 0)
+        return "";
 
     const premiereClasse =
     students.find(
@@ -876,15 +890,14 @@ function getTargetLevel(){
     if(!premiereClasse)
         return "";
 
-    const niveau =
-    parseInt(
-        premiereClasse.match(/\d+/)?.[0]
-    );
+    const match =
+    premiereClasse.match(/^(\d+)/);
 
-    if(isNaN(niveau))
-        return "";
+    // Pas de chiffre : classes de primaire → on constitue des 6e
+    if(!match)
+        return "6";
 
-    return niveau - 1;
+    return String(Number(match[1]) - 1);
 }
 
 function buildClasses(){
@@ -905,7 +918,9 @@ function buildClasses(){
         "column";
 
         div.innerHTML = `
-            <h2>Classe ${getTargetLevel()}${classe}</h2>
+            <h2 id="title-${classe}">
+                Classe ${getTargetLevel()}${classe}
+            </h2>
 
             <div
                 class="stats"
