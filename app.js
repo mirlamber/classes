@@ -649,11 +649,31 @@ document
 );
 
 function saveData(){
-    const blob = new Blob([JSON.stringify(students, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    // Le nom contiendra maintenant la date grâce à getExportFileName()
-    a.download = `${getExportFileName()}.json`;
+
+    const blob =
+    new Blob(
+        [
+            JSON.stringify(
+                students,
+                null,
+                2
+            )
+        ],
+        {
+            type:
+            "application/json"
+        }
+    );
+
+    const a =
+    document.createElement("a");
+
+    a.href =
+    URL.createObjectURL(blob);
+
+    a.download =
+    `${getExportFileName()}.json`;
+
     a.click();
 }
 
@@ -716,17 +736,10 @@ document
 );
 
 function getExportFileName() {
+
     const niveau = getTargetLevel();
-    
-    // 🗓️ Création de la date au format JJ-MM-AAAA
-    const d = new Date();
-    const dateStr = [
-        String(d.getDate()).padStart(2, '0'),
-        String(d.getMonth() + 1).padStart(2, '0'),
-        d.getFullYear()
-    ].join('-');
-    
-    return `Constitution_des_classes_de_${niveau}e_${dateStr}`;
+
+    return `Constitution des classes de ${niveau}e`;
 }
 
 function exportPDF(){
@@ -781,36 +794,43 @@ function exportPDF(){
         `;
     });
 
-    const fenetre = window.open("", "_blank");
-    
-    // 🧠 NOUVEAU : On récupère exactement le même nom généré pour le JSON et le CSV
-    const nomFichier = getExportFileName();
+    const fenetre =
+    window.open(
+        "",
+        "_blank"
+    );
 
     fenetre.document.write(`
         <html>
         <head>
-            <title>${nomFichier}</title>
+            <title>Répartition</title>
             <style>
-                body{ font-family:Arial; padding:20px; }
-                h2{ margin-top:30px; }
+                body{
+                    font-family:Arial;
+                    padding:20px;
+                }
+
+                h2{
+                    margin-top:30px;
+                }
             </style>
         </head>
 
         <body>
-            <h1>${nomFichier.replace(/_/g, " ")}</h1>
 
-            ${contenu}
+        <h1>
+        Répartition des classes
+        </h1>
+
+        ${contenu}
+
         </body>
         </html>
     `);
 
     fenetre.document.close();
 
-    // Petite temporisation pour s'assurer que le DOM (et surtout le <title>) 
-    // est bien chargé par le navigateur avant de déclencher l'impression.
-    setTimeout(() => {
-        fenetre.print();
-    }, 150);
+    fenetre.print();
 }
 
 document
