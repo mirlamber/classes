@@ -561,25 +561,6 @@ function updateStats(){
         ========================= */
         if (classe === "pool") {
 
-            const total = students.length;
-
-            const nbPool =
-                students.filter(
-                    s => s.classe === "pool"
-                ).length;
-
-            const el =
-                document.getElementById(
-                    "pool-count"
-                );
-
-            if (el) {
-                el.textContent =
-                    ` (${nbPool}/${total})`;
-            }
-
-            // le reste des stats pool
-
             const setCount = (id, value) => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = value;
@@ -604,19 +585,11 @@ function updateStats(){
         ========================= */
         const cible = document.getElementById("stats-" + classe);
         if (!cible) return;
-        const titre =
-        document.getElementById(
-            "title-" + classe
-        );
 
-        if(titre){
-
-            titre.textContent =
-            `Classe ${getTargetLevel()}${classe} • ${data.length} élèves`;
-
-        }
         cible.innerHTML = `
             <div class="stats-line">
+
+                <div>${data.length} élèves</div>
 
                 <div class="stats-second">
                     <span>${filles}F / ${garcons}G</span>
@@ -672,7 +645,7 @@ function saveData(){
     URL.createObjectURL(blob);
 
     a.download =
-    `${getExportFileName()}.json`;
+    "repartition.json";
 
     a.click();
 }
@@ -734,13 +707,6 @@ document
     "click",
     exportPDF
 );
-
-function getExportFileName() {
-
-    const niveau = getTargetLevel();
-
-    return `Constitution des classes de ${niveau}e`;
-}
 
 function exportPDF(){
 
@@ -892,7 +858,7 @@ function exportCSV(){
     URL.createObjectURL(blob);
 
     a.download =
-    `${getExportFileName()}.csv`;
+    "repartition.csv";
 
     a.click();
 }
@@ -902,21 +868,23 @@ function exportCSV(){
 
 function getTargetLevel(){
 
-    const classe =
+    const premiereClasse =
     students.find(
-        s => s.classeOrigine &&
-             s.classeOrigine !== "NVX"
+        s => s.classeOrigine !== "NVX"
     )?.classeOrigine;
 
-    if(!classe)
-        return "5"; // valeur par défaut
+    if(!premiereClasse)
+        return "";
 
-    const match = classe.match(/^(\d+)/);
+    const niveau =
+    parseInt(
+        premiereClasse.match(/\d+/)?.[0]
+    );
 
-    if(!match)
-        return "5"; // A, B, C, D => futur niveau 5e
+    if(isNaN(niveau))
+        return "";
 
-    return Number(match[1]) - 1;
+    return niveau - 1;
 }
 
 function buildClasses(){
@@ -937,9 +905,7 @@ function buildClasses(){
         "column";
 
         div.innerHTML = `
-            <h2 id="title-${classe}">
-                Classe ${getTargetLevel()}${classe}
-            </h2>
+            <h2>Classe ${getTargetLevel()}${classe}</h2>
 
             <div
                 class="stats"
