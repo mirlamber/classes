@@ -36,7 +36,7 @@
     <button id="saveBtn">💾 Sauvegarder</button>
 
     <button id="pdfBtn">📄 Export PDF</button>
-    <button id="csvBtn">Export CSV</button>
+    <button id="csvBtn">Export tableur</button>
     <button id="adminBtn">⚙️ Admin</button>
 
     <div id="adminModal" class="modal" style="display:none;">
@@ -156,7 +156,7 @@
         </div>
 
         <div class="legend-item">
-            <span class="dot">⚫</span>
+            <span class="dot">🏃</span>
             <span class="label">Sport</span>
             <span class="count" id="count-sport">0</span>
         </div>
@@ -224,7 +224,7 @@
 
     <label>
         <input type="checkbox" id="ctx-sport">
-        ⚫ Sport
+        🏃 Sport
     </label>
 
     <label>
@@ -239,8 +239,9 @@
 </div>
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="app.js"></script>
+
 
 </body>
 </html>
